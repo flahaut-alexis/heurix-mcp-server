@@ -1,0 +1,39 @@
+# Paquet installable du serveur MCP Heurix.
+#
+# POURQUOI CE FICHIER : les annuaires MCP (mcp.so, Smithery, Glama) verifient
+# un serveur en INTROSPECTANT un processus qu'ils lancent. Un zip telecharge
+# depuis un site ne leur suffit pas -- il leur faut une commande executable.
+# Publie sur PyPI, le serveur devient lancable par `uvx heurix-mcp-server`,
+# ce que tout crawler d'annuaire sait faire.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "heurix-mcp-server"
+version = "0.1.0"
+description = "Serveur MCP pour Heurix — recherche et classement de catalogues produits techniques en langage naturel"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Alexis Flahaut", email = "contact@heurix.fr" }]
+keywords = ["mcp", "model-context-protocol", "search", "ecommerce", "catalog", "product-search"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+]
+dependencies = ["mcp>=1.2.0", "httpx>=0.27"]
+
+[project.urls]
+Homepage = "https://heurix.fr"
+Documentation = "https://heurix.fr/docs.html#ep-mcp"
+Repository = "https://github.com/flahaut-alexis/heurix-mcp-server"
+
+[project.scripts]
+heurix-mcp-server = "server:main"
+
+[tool.hatch.build.targets.wheel]
+include = ["server.py"]
