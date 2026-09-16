@@ -39,13 +39,17 @@ if not HEURIX_API_KEY:
 mcp = FastMCP(
     "heurix",
     instructions=(
-        "Outils pour interroger un catalogue produit indexé sur Heurix — un "
-        "moteur de recherche et de classement pour catalogues techniques "
-        "(regex sur références produit, facettes, tri par catégorie). "
-        "Commencez par heurix_catalog_stats si vous ne connaissez pas encore "
-        "les catalogues, catégories ou attributs disponibles sur ce compte : "
-        "les noms de catalogue et de catégorie sont sensibles à la casse et "
-        "doivent être exacts, pas devinés."
+        "Outils pour interroger un catalogue produit indexé sur Heurix, un "
+        "moteur de recherche et de classement pour catalogues techniques. "
+        "heurix_catalog_stats rend les noms des catalogues de cette clé et, "
+        "pour un catalogue donné, ses catégories Browse. Il ne rend aucun nom "
+        "de champ ni d'annotation : ceux-là se lisent dans les résultats de "
+        "heurix_search, dans `product` et dans `matched` (coupé à 8 "
+        "entrées par résultat, et seulement ce qui a compté pour ce "
+        "résultat). Les noms de "
+        "catalogue et de catégorie sont sensibles à la casse et doivent être "
+        "exacts, pas devinés : un catalogue mal écrit rend une erreur 404, "
+        "une catégorie mal écrite rend une liste vide sans erreur."
     ),
 )
 
@@ -84,8 +88,9 @@ async def _post(path: str, json_body: dict) -> dict:
 @mcp.tool()
 async def heurix_search(catalog: str, query: str, filters: list[str] | None = None, limit: int = 10) -> dict:
     """Recherche des produits dans un catalogue Heurix par mot-clé, avec
-    tolérance aux fautes de frappe et reconnaissance des références
-    techniques (diamètres, longueurs, matières, ISBN...). Utilisez
+    tolérance aux fautes de frappe. Les références techniques reconnues
+    (diamètres, matières, ISBN...) dépendent du pack de règles du
+    catalogue, indiqué par heurix_catalog_stats. Utilisez
     heurix_catalog_stats d'abord si le nom exact du catalogue n'est pas
     déjà connu.
 
@@ -99,9 +104,18 @@ async def heurix_search(catalog: str, query: str, filters: list[str] | None = No
         query: Texte de recherche, tel qu'un utilisateur le taperait —
             les fautes de frappe et formats différents sont tolérés par
             le moteur, pas la peine de les corriger avant d'appeler.
-        filters: Liste optionnelle de filtres exacts sur des annotations
-            connues (ex. ["DIAM_M8"]). Laisser vide si incertain plutôt
-            que de deviner une valeur.
+        filters: Filtres exacts, tous exigés. Deux formes :
+            "champ:valeur" : un champ du produit, nommé comme dans
+            `product` d'un résultat, avec la valeur exacte qu'il y porte ;
+            "champ:a|b" accepte l'une ou l'autre.
+            "ANNOTATION" : une étiquette du pack de règles, écrite comme
+            après « annotation # » dans `matched`.
+            Les noms et les valeurs changent d'un catalogue à l'autre :
+            cherchez d'abord sans filtre et lisez-les dans la réponse.
+            Un champ ou une annotation inconnus sont listés dans
+            `filters_unknown`. Une valeur inconnue d'un champ connu ne
+            l'est pas : elle rend total 0 sans autre signal. Un mot seul
+            (M8, inox) est lu comme une annotation.
         limit: Nombre maximal de résultats, entre 1 et 100 (défaut 10).
     """
     return await _post(
@@ -118,13 +132,20 @@ async def heurix_browse(catalog: str, category: str, sort: str = "stock", limit:
     pour ça). Utilisez heurix_catalog_stats pour découvrir les
     catégories réellement disponibles si elles ne sont pas déjà connues
     — inventer un nom de catégorie renverra une liste vide, pas une erreur.
+    Si l'offre de la clé n'inclut pas Browse, ce tool rend une erreur 403
+    et heurix_catalog_stats une liste de catégories vide.
 
     Args:
         catalog: Nom exact du catalogue.
         category: Valeur de catégorie exacte, sensible à la casse.
         sort: Stratégie de tri — "stock" (défaut, en stock d'abord),
             "recent", "alphabetical", "price_asc", "price_desc",
-            "margin", ou "popular" (popularité réelle, clics et achats).
+            "margin", ou "popular" (clics et achats enregistrés). Les
+            produits sans marge (pour "margin") ou sans clic ni achat
+            (pour "popular") passent après les autres, dans l'ordre de
+            "stock" ; si aucun n'en a, l'ordre est celui de "stock". Une
+            valeur hors liste est remplacée par
+            "stock" ; le champ `sort` de la réponse donne le tri appliqué.
         limit: Nombre maximal de résultats, entre 1 et 100 (défaut 20).
     """
     return await _get(
@@ -138,8 +159,10 @@ async def heurix_catalog_stats(catalog: str | None = None) -> dict:
     """Liste tous les catalogues accessibles avec cette clé API et leurs
     statistiques de base (nombre de produits, pack de règles actif). Si
     `catalog` est précisé, renvoie en plus les catégories Browse
-    disponibles pour ce catalogue. À appeler en premier pour découvrir
-    ce qui existe, avant une recherche ou un parcours par catégorie.
+    disponibles pour ce catalogue, ou une liste vide si l'offre de la clé
+    n'inclut pas Browse. `annotations` est un nombre : aucun nom de champ
+    ni d'annotation n'est rendu ici. À appeler en premier pour connaître
+    les catalogues et leurs catégories.
 
     Args:
         catalog: Nom d'un catalogue précis (optionnel). Sans ce

@@ -1,0 +1,421 @@
+{
+  "provenance": "Reponses reellement rendues par le moteur Heurix, relevees le 16 septembre 2026. Les deux premiers catalogues portent les MEMES 800 articles (deploy/generer_catalogue.py, graine 42) indexes avec deux packs de regles differents ; le troisieme est le catalogue de demonstration de production, joint sans cle par sa route publique. Rien n'est invente : ce fichier est un releve, pas un jeu d'essai ecrit a la main.",
+  "catalogs_endpoint": {
+    "catalogs": [
+      {
+        "catalog": "public-demo",
+        "products": 800,
+        "terms": 1055,
+        "annotations": 260,
+        "rulepack": "outillage",
+        "rulepacks": [
+          "outillage"
+        ],
+        "synonym_groups": 0,
+        "sandbox": false
+      },
+      {
+        "catalog": "demo-attributs",
+        "products": 800,
+        "terms": 1055,
+        "annotations": 78,
+        "rulepack": "mode",
+        "rulepacks": [
+          "mode"
+        ],
+        "synonym_groups": 0,
+        "sandbox": false
+      }
+    ]
+  },
+  "catalogues": {
+    "public-demo": {
+      "origine": "moteur local, arbre cbfc93d, 16 septembre 2026",
+      "stats": {
+        "catalog": "public-demo",
+        "products": 800,
+        "terms": 1055,
+        "annotations": 260,
+        "rulepack": "outillage",
+        "rulepacks": [
+          "outillage"
+        ],
+        "synonym_groups": 0,
+        "sandbox": false
+      },
+      "browse_categories": {
+        "categories": [
+          {
+            "category": "fixation",
+            "products": 743
+          },
+          {
+            "category": "visserie",
+            "products": 432
+          },
+          {
+            "category": "boulonnerie",
+            "products": 275
+          },
+          {
+            "category": "accessoires",
+            "products": 99
+          },
+          {
+            "category": "maconnerie",
+            "products": 51
+          }
+        ]
+      },
+      "recherches": {
+        "[]": {
+          "total": 309,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "diametre",
+            "famille",
+            "id",
+            "matiere",
+            "name",
+            "norme",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "terme 'vis-14-70-brut' (depuis 'vis', x0.22)",
+            "annotation #FAM_VIS"
+          ]
+        },
+        "[\"DIAM_M8\"]": {
+          "total": 28,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "diametre",
+            "famille",
+            "id",
+            "matiere",
+            "name",
+            "norme",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "annotation #FAM_VIS"
+          ]
+        },
+        "[\"M8\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "M8"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"inox\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "inox"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"diametre:M8\"]": {
+          "total": 28,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "diametre",
+            "famille",
+            "id",
+            "matiere",
+            "name",
+            "norme",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "annotation #FAM_VIS"
+          ]
+        },
+        "[\"matiere:inox\"]": {
+          "total": 0,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"matiere:inox A2\"]": {
+          "total": 81,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "diametre",
+            "famille",
+            "id",
+            "matiere",
+            "name",
+            "norme",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "terme 'vis-12-50-a2' (depuis 'vis', x0.22)",
+            "annotation #FAM_VIS"
+          ]
+        }
+      },
+      "requetes_libres": {
+        "M8": 66,
+        "\\bM8\\b": 0,
+        "^VIS-8": 309,
+        "vis inox": 563,
+        "vsi inox": 435,
+        "9782070368228": 0
+      }
+    },
+    "demo-attributs": {
+      "origine": "moteur local, arbre cbfc93d, 16 septembre 2026",
+      "stats": {
+        "catalog": "demo-attributs",
+        "products": 800,
+        "terms": 1055,
+        "annotations": 78,
+        "rulepack": "mode",
+        "rulepacks": [
+          "mode"
+        ],
+        "synonym_groups": 0,
+        "sandbox": false
+      },
+      "browse_categories": {
+        "categories": [
+          {
+            "category": "fixation",
+            "products": 743
+          },
+          {
+            "category": "visserie",
+            "products": 432
+          },
+          {
+            "category": "boulonnerie",
+            "products": 275
+          },
+          {
+            "category": "accessoires",
+            "products": 99
+          },
+          {
+            "category": "maconnerie",
+            "products": 51
+          }
+        ]
+      },
+      "recherches": {
+        "[]": {
+          "total": 148,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "diametre",
+            "famille",
+            "id",
+            "matiere",
+            "name",
+            "norme",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "terme 'vis-14-70-brut' (depuis 'vis', x0.22)"
+          ]
+        },
+        "[\"DIAM_M8\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "DIAM_M8"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"M8\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "M8"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"inox\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "inox"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"diametre:M8\"]": {
+          "total": 13,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "diametre",
+            "famille",
+            "id",
+            "matiere",
+            "name",
+            "norme",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)"
+          ]
+        },
+        "[\"matiere:inox\"]": {
+          "total": 0,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"matiere:inox A2\"]": {
+          "total": 38,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "diametre",
+            "famille",
+            "id",
+            "matiere",
+            "name",
+            "norme",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "terme 'vis-12-50-a2' (depuis 'vis', x0.22)"
+          ]
+        }
+      },
+      "requetes_libres": {
+        "M8": 61,
+        "\\bM8\\b": 0,
+        "^VIS-8": 11,
+        "vis inox": 383,
+        "vsi inox": 288,
+        "9782070368228": 0
+      }
+    },
+    "public-demo (api.heurix.fr)": {
+      "origine": "api.heurix.fr, /v1/public-demo/search?vertical=outillage, git_sha cbfc93d, 16 septembre 2026",
+      "recherches": {
+        "[]": {
+          "total": 845,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "id",
+            "image",
+            "name",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "terme 'vis-10-60-inox' (depuis 'vis', x0.22)",
+            "annotation #FAM_VIS"
+          ]
+        },
+        "[\"DIAM_M8\"]": {
+          "total": 56,
+          "filters_unknown": null,
+          "champs_du_premier_produit": [
+            "categories",
+            "description",
+            "id",
+            "image",
+            "name",
+            "price",
+            "ref",
+            "stock"
+          ],
+          "matched_du_premier": [
+            "terme 'vis' (depuis 'vis', x1.00)",
+            "annotation #FAM_VIS"
+          ]
+        },
+        "[\"M8\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "M8"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"inox\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "inox"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"diametre:M8\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "diametre"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"matiere:inox\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "matiere"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        },
+        "[\"matiere:inox A2\"]": {
+          "total": 0,
+          "filters_unknown": [
+            "matiere"
+          ],
+          "champs_du_premier_produit": [],
+          "matched_du_premier": []
+        }
+      },
+      "requetes_libres": {
+        "M8": 141,
+        "\\bM8\\b": 0,
+        "^VIS-8": 845,
+        "vis inox": 1397,
+        "vsi inox": 900,
+        "9782070368228": 0
+      }
+    }
+  }
+}
