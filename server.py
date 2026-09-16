@@ -44,7 +44,9 @@ mcp = FastMCP(
         "heurix_catalog_stats rend les noms des catalogues de cette clé et, "
         "pour un catalogue donné, ses catégories Browse. Il ne rend aucun nom "
         "de champ ni d'annotation : ceux-là se lisent dans les résultats de "
-        "heurix_search, dans `product` et dans `matched`. Les noms de "
+        "heurix_search, dans `product` et dans `matched` (coupé à 8 "
+        "entrées par résultat, et seulement ce qui a compté pour ce "
+        "résultat). Les noms de "
         "catalogue et de catégorie sont sensibles à la casse et doivent être "
         "exacts, pas devinés : un catalogue mal écrit rend une erreur 404, "
         "une catégorie mal écrite rend une liste vide sans erreur."
@@ -138,9 +140,11 @@ async def heurix_browse(catalog: str, category: str, sort: str = "stock", limit:
         category: Valeur de catégorie exacte, sensible à la casse.
         sort: Stratégie de tri — "stock" (défaut, en stock d'abord),
             "recent", "alphabetical", "price_asc", "price_desc",
-            "margin", ou "popular" (clics et achats enregistrés). Sans
-            marge ou sans clics enregistrés, "margin" et "popular" rendent
-            l'ordre de "stock". Une valeur hors liste est remplacée par
+            "margin", ou "popular" (clics et achats enregistrés). Les
+            produits sans marge (pour "margin") ou sans clic ni achat
+            (pour "popular") passent après les autres, dans l'ordre de
+            "stock" ; si aucun n'en a, l'ordre est celui de "stock". Une
+            valeur hors liste est remplacée par
             "stock" ; le champ `sort` de la réponse donne le tri appliqué.
         limit: Nombre maximal de résultats, entre 1 et 100 (défaut 20).
     """
