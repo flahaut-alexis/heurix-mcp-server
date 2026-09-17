@@ -21,8 +21,11 @@ from __future__ import annotations
 import os
 import sys
 
+from typing import Annotated
+
 import httpx
 from mcp.server.fastmcp import FastMCP
+from pydantic import Field
 
 HEURIX_API_KEY = os.environ.get("HEURIX_API_KEY", "").strip()
 HEURIX_API_BASE = os.environ.get("HEURIX_API_BASE", "https://api.heurix.fr").rstrip("/")
@@ -52,6 +55,21 @@ mcp = FastMCP(
         "une catégorie mal écrite rend une liste vide sans erreur."
     ),
 )
+
+
+# POURQUOI LES PARAMETRES OPTIONNELS NE PUBLIENT PAS LEUR `default`
+# (17 septembre 2026, Claude.app 2.110.1). Le schema publie est plus pauvre
+# que la signature : la valeur par defaut reste appliquee ici, mais la cle
+# `default` est retiree du JSON Schema. Avec elle, Claude.app refuse tout
+# appel qui omet le parametre (« expected nonoptional ») : l'app transforme
+# chaque `default` en `.prefault()` Zod 4.5.4, puis valide avec le Zod 4.4.3
+# de son SDK, qui exige alors la cle. `heurix_catalog_stats` sans argument
+# etait impossible, `heurix_search` sans `limit` aussi. `catalog: str = ""`
+# ne l'evitait pas : c'est la cle `default` qui declenche, pas le type.
+# Le SDK Python officiel et le SDK TypeScript acceptent les deux formes.
+# A retirer quand l'app ne refusera plus un parametre omis a `default`
+# (tests/test_parametres_optionnels.py decrit la mesure).
+SANS_DEFAUT = Field(json_schema_extra=lambda schema: schema.pop("default", None))
 
 
 def _auth_headers() -> dict:
@@ -86,7 +104,12 @@ async def _post(path: str, json_body: dict) -> dict:
 
 
 @mcp.tool()
-async def heurix_search(catalog: str, query: str, filters: list[str] | None = None, limit: int = 10) -> dict:
+async def heurix_search(
+    catalog: str,
+    query: str,
+    filters: Annotated[list[str] | None, SANS_DEFAUT] = None,
+    limit: Annotated[int, SANS_DEFAUT] = 10,
+) -> dict:
     """Recherche des produits dans un catalogue Heurix par mot-clé, avec
     tolérance aux fautes de frappe. Les références techniques reconnues
     (diamètres, matières, ISBN...) dépendent du pack de règles du
@@ -104,7 +127,8 @@ async def heurix_search(catalog: str, query: str, filters: list[str] | None = No
         query: Texte de recherche, tel qu'un utilisateur le taperait —
             les fautes de frappe et formats différents sont tolérés par
             le moteur, pas la peine de les corriger avant d'appeler.
-        filters: Filtres exacts, tous exigés. Deux formes :
+        filters: Filtres exacts, tous exigés (optionnel : sans ce
+            paramètre, aucun filtre). Deux formes :
             "champ:valeur" : un champ du produit, nommé comme dans
             `product` d'un résultat, avec la valeur exacte qu'il y porte ;
             "champ:a|b" accepte l'une ou l'autre.
@@ -125,7 +149,12 @@ async def heurix_search(catalog: str, query: str, filters: list[str] | None = No
 
 
 @mcp.tool()
-async def heurix_browse(catalog: str, category: str, sort: str = "stock", limit: int = 20) -> dict:
+async def heurix_browse(
+    catalog: str,
+    category: str,
+    sort: Annotated[str, SANS_DEFAUT] = "stock",
+    limit: Annotated[int, SANS_DEFAUT] = 20,
+) -> dict:
     """Liste les produits d'une catégorie sans recherche textuelle — pour
     une demande du type "montre-moi tous les produits de telle
     catégorie", pas une recherche par mot-clé (utilisez heurix_search
@@ -155,7 +184,7 @@ async def heurix_browse(catalog: str, category: str, sort: str = "stock", limit:
 
 
 @mcp.tool()
-async def heurix_catalog_stats(catalog: str | None = None) -> dict:
+async def heurix_catalog_stats(catalog: Annotated[str | None, SANS_DEFAUT] = None) -> dict:
     """Liste tous les catalogues accessibles avec cette clé API et leurs
     statistiques de base (nombre de produits, pack de règles actif). Si
     `catalog` est précisé, renvoie en plus les catégories Browse
